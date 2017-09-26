@@ -20,13 +20,16 @@ typedef struct ListNode Node;
 struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2) {
     
 
-    Node *reList = malloc(sizeof(Node));
-    // haven't compelete the n-node linked list structure
-    int sum = 0;
-    int v1 = 0;
-    int v2 = 0;
-    int rv1 = 0;
-    int rv2 = 0;
+    Node *reList,*previous;
+    int sum  = 0;
+    int rsum = 0;
+    int v1   = 0;
+    int v2   = 0;
+    int rv1  = 0;
+    int rv2  = 0;
+    int i    = 0;
+    
+    previous = NULL;
     
     while(l1)
     {
@@ -55,15 +58,26 @@ struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2) {
     // v2 = l2.total#
     
     sum = v1+v2;
-    
-   
+          
     while(sum)
     {
-        reList->val = sum%10;
+        rsum = rsum*10+sum%10;
         sum = sum/10;
-        reList = reList->next;
     }
     
-    //reList->val = sum;
+    //first->val = sum;
+       
+    while(rsum)
+    {
+        reList = (Node *)malloc(sizeof(Node));//建立新節點
+        reList->next = NULL;
+        
+        reList->val = rsum%10;
+        rsum = rsum/10;
+        reList->next = previous;
+        previous = reList; 
+    }
+       
+    
     return reList;
 }
