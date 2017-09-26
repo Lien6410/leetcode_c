@@ -21,7 +21,11 @@ struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2) {
 
     Node *reList,*previous,*first;
     first = (Node *)malloc(sizeof(Node));
+    first->val = 0;
+    first->next = NULL;
     previous = (Node *)malloc(sizeof(Node));
+    previous->val = 0;
+    previous->next = NULL; 
         
     int i     = 0;   
     int carry = 0;    
