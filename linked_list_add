@@ -20,46 +20,40 @@ typedef struct ListNode Node;
 struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2) {
 
     Node *reList,*previous,*first;
-    int sum   = 0;
-    int v1    = 0;
-    int v2    = 0;    
-    int i     = 0;
-    int carry = 0;
-      
     first = (Node *)malloc(sizeof(Node));
     previous = (Node *)malloc(sizeof(Node));
-       
-    while(l1!=NULL||l2!=NULL||carry!=0)
+        
+    int i     = 0;   
+    int carry = 0;    
+    while(l1 != NULL || l2 != NULL || carry != 0)
     {
-        if(l1!=NULL)
+        int v1,v2;
+        if(l1 != NULL)
         {
-            v1 = l1->val;
-            l1 = l1->next;
+            v1 = l1 -> val;
+            l1 = l1 -> next;
         }
         else
         {
             v1 = 0;
         }
         
-        
-        
-        if(l2!=NULL)
+        if(l2 != NULL)
         {
-            v2 = l2->val;
-            l2 = l2->next;
+            v2 = l2 -> val;
+            l2 = l2 -> next;
         }
         else
         {
             v2 = 0;
         }
         
+        int sum = v1 + v2 + carry;
         
-        sum = v1+v2+carry;
-
-        if(sum>=10)
+        if(sum >= 10)
         {
             carry = 1;
-            sum = sum%10;
+            sum = sum % 10;
         }
         else
         {
@@ -67,20 +61,19 @@ struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2) {
         }
         
         reList = (Node *)malloc(sizeof(Node));//建立新節點
-        reList->next = NULL;
+        reList -> next = NULL;
         
-        reList->val = sum;
+        reList-> val = sum;
         
-        if(i==0)
+        if(i == 0)
         {
             first = reList;
         }
         else
         {
-            previous->next = reList;
+            previous -> next = reList;
         }
-        
-        
+    
         previous = reList; 
         i++;
     }
