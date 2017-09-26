@@ -18,66 +18,73 @@ Output: 7 -> 0 -> 8
 typedef struct ListNode Node;
         
 struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2) {
-    
 
-    Node *reList,*previous;
-    int sum  = 0;
-    int rsum = 0;
-    int v1   = 0;
-    int v2   = 0;
-    int rv1  = 0;
-    int rv2  = 0;
-    int i    = 0;
-    
-    previous = NULL;
-    
-    while(l1)
-    {
-        rv1 = rv1*10+l1->val;
-        l1 = l1->next;
-    }
-    // rv1 = reverse(l1.total#); 
-    while(rv1)
-    {
-        v1 = v1*10 + rv1%10;
-        rv1 = rv1/10;
-    }
-    // v1 = l1.total#
-    
-    while(l2)
-    {
-        rv2 = rv2*10+l2->val;
-        l2 = l2->next;
-    }
-    // rv2 = reverse(l2.total#); 
-    while(rv2)
-    {
-        v2 = v2*10 + rv2%10;
-        rv2 = rv2/10;
-    }
-    // v2 = l2.total#
-    
-    sum = v1+v2;
-          
-    while(sum)
-    {
-        rsum = rsum*10+sum%10;
-        sum = sum/10;
-    }
-    
-    //first->val = sum;
+    Node *reList,*previous,*first;
+    int sum   = 0;
+    int v1    = 0;
+    int v2    = 0;    
+    int i     = 0;
+    int carry = 0;
+      
+    first = (Node *)malloc(sizeof(Node));
+    previous = (Node *)malloc(sizeof(Node));
        
-    while(rsum)
+    while(l1!=NULL||l2!=NULL||carry!=0)
     {
+        if(l1!=NULL)
+        {
+            v1 = l1->val;
+            l1 = l1->next;
+        }
+        else
+        {
+            v1 = 0;
+        }
+        
+        
+        
+        if(l2!=NULL)
+        {
+            v2 = l2->val;
+            l2 = l2->next;
+        }
+        else
+        {
+            v2 = 0;
+        }
+        
+        
+        sum = v1+v2+carry;
+
+        if(sum>=10)
+        {
+            carry = 1;
+            sum = sum%10;
+        }
+        else
+        {
+            carry = 0;            
+        }
+        
         reList = (Node *)malloc(sizeof(Node));//建立新節點
         reList->next = NULL;
         
-        reList->val = rsum%10;
-        rsum = rsum/10;
-        reList->next = previous;
+        reList->val = sum;
+        
+        if(i==0)
+        {
+            first = reList;
+        }
+        else
+        {
+            previous->next = reList;
+        }
+        
+        
         previous = reList; 
+        i++;
     }
-       
+        
     
-    return reList;
+    return first;
 }
