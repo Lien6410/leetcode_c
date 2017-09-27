@@ -4,29 +4,20 @@ Determine whether an integer is a palindrome. Do this without extra space.
 
 */
 
-bool isPalindrome(int x) {
-    if (x == NULL) return false;
-    if ((x < 0) || (x > 2147483647)) return false;
-    //if (x < 10) return true;
+bool isPalindrome(int x) {    
+    if ((x < 0) ) return false;
     
     int div = 1;
     
-    while(x / div > 10) div = div * 10;
+    while(x / div >= 10) div = div * 10;
     
-    while (x > 10)
+    while (x)
     {
         int head = x / div;
         int tail = x % 10;
-        if (head != tail)
-        {
-            return false;
-        }
-        else
-        {
-            x = (x - head * div) / 10;
-            if (x < 10) return true;
-            div = div / 100;
-        }
+        if (head != tail) return false;
+        x = (x % div) / 10;        
+        div = div / 100;        
     }
     
     return true;
