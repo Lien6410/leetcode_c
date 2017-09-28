@@ -1,0 +1,60 @@
+/*
+Reverse a singly linked list.
+
+A linked list can be reversed either iteratively or recursively. Could you implement both?
+*/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+typedef struct ListNode Node;
+struct ListNode* reverseList(struct ListNode* head) {
+    if ((!head) || (!head->next)) return head;
+    Node *prehead = (Node *) malloc(sizeof(Node));
+    prehead->val = 0;
+    prehead->next = head;
+    
+    Node *last = head;
+    while(last->next)
+    {
+        Node *temp = last->next;
+        last->next = temp->next;
+        temp->next = prehead->next;
+        prehead->next = temp;
+    }
+    return prehead->next;
+}
+
+/* (Iterative)
+Time complexity : O(n)O(n). Assume that nn is the list's length, the time complexity is O(n)O(n).
+Space complexity : O(1)O(1).
+
+public ListNode reverseList(ListNode head) {
+    ListNode prev = null;
+    ListNode curr = head;
+    while (curr != null) {
+        ListNode nextTemp = curr.next;
+        curr.next = prev;
+        prev = curr;
+        curr = nextTemp;
+    }
+    return prev;
+}
+*/
+
+/* Recursive
+Time complexity : O(n)O(n). Assume that nn is the list's length, the time complexity is O(n)O(n).
+Space complexity : O(n)O(n). The extra space comes from implicit stack space due to recursion. The recursion could go up to nn levels deep.
+
+public ListNode reverseList(ListNode head) {
+    if (head == null || head.next == null) return head;
+    ListNode p = reverseList(head.next);
+    head.next.next = head;
+    head.next = null;
+    return p;
+}
+*/
