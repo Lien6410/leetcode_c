@@ -1,0 +1,48 @@
+/*
+Given a singly linked list, determine if it is a palindrome.
+
+Follow up:
+Could you do it in O(n) time and O(1) space?
+*/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+typedef struct ListNode Node;
+bool isPalindrome(struct ListNode* head) {
+    if ((head == NULL) || (head->next == NULL)) return true;
+    //use fast and slow node to find the middle of the list
+    Node *fast = head;
+    Node *slow = head;
+    
+    while((fast->next) && (fast->next->next))
+    {
+        fast = fast->next->next;
+        slow = slow->next;
+    }// now slow is the middle location of the list
+        
+    Node *pre = head;
+    Node *last = slow->next;
+    
+    while(last->next)
+    {
+        Node *tmp = last->next;
+        last->next = tmp->next;
+        tmp->next = slow->next;
+        slow->next = tmp;        
+    }// reverse order of list after slow
+    // begin with last = slow->next; bring each last->next into slow and slow->next
+    
+    while(slow->next)
+    {
+        slow = slow->next;
+        if(slow->val != pre->val) return false;
+        pre = pre->next;        
+    }// compare each node from slow->next to end
+    
+    return true;
+ }
