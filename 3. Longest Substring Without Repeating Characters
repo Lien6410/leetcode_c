@@ -10,57 +10,59 @@ Given "bbbbb", the answer is "b", with the length of 1.
 Given "pwwkew", the answer is "wke", with the length of 3. Note that the answer must be a substring, "pwke" is a subsequence and not a substring.
 */
 
-int lengthOfLongestSubstring(char* s) {
-    if (!s) return 0;    
-    
-    int charlen = 0;
-    while (*(s + charlen)) {
-        charlen++;
+int StrLength(char *s){
+    int len = 0;
+    while (s[len]) len++;
+    return len;
+} // strlen for char poninter input
+
+bool UniqueTail(char *s, int current, int tail){
+    while (current < tail) {
+        if (s[current] == s[tail] ) return false;
+        current++;
     }
-    if (charlen <= 1) return charlen;
+    return true;    
+} // check if the substring has no repeat char.
+
+int lengthOfLongestSubstring(char* s) {
+    //if (!s) return 0;    
+    
+    int charlen = StrLength(s);   
+    if (charlen <= 1) return charlen; // for NULL and one char case.
     //printf("charlen = %d. \n" , charlen);
     
-    int maxlen = 1;
-    int head = 0;    
-    while (head < (charlen - 1))
+    int maxlen = 1; // non-NULL case has at least one substring with no repeat contains only one char.
+    int head = 0;   // set the head index for each substring. 
+    while (head < (charlen - 1)) // substring s[tail] has conside.
     {
-        int tailset = 0;
+        int tailset = 0; // 1 means tail is found for sudden head.
         int tail = head + 1;            
         while (!tailset)
         {
             if ((charlen - 1) == tail)
             {
-                for (int i = head; i < tail; i++)
-                {
-                    if (*(s + i) == *(s + tail))
-                    {
-                        tail = tail - 1;
-                        break;
-                    }
-                }
-                tailset = 1;
+                if (!UniqueTail(s , head , tail)) tail = tail - 1; 
+                // if no repeat then s[tail] is s[charlen - 1] otherwise s[tail] is s[(charlen -1) - 1].
+                tailset = 1; // both case found its tail.
             }
             else
-            {
-                for (int i = head; i < tail; i++)
-                {
-                    if (*(s + i) == *(s + tail))
-                    {
-                        tail = tail - 1;
-                        tailset = 1;
-                        break;
-                    }
-                    else
-                    {
-                        tailset = 0;
-                    }                        
+            {   
+                if (!UniqueTail(s , head , tail)) {
+                    tail = tail - 1;
+                    tailset = 1;
+                    // get repeat and tail found which is previous no repeat tail.
                 }
-                if (!tailset) tail++;                
+                else {
+                    tail++;                    
+                    // tail still not found (tailset still zero) extend tail to next index.
+                }                
             }            
         }
         int substrlen = tail - head + 1;
         maxlen = substrlen > maxlen ? substrlen : maxlen;        
-        head++;
+        // if any longest substring* is found check the length is longer than maxlen and update maxlen.
+        head++; 
+        // check all longest substring* with different heads.
     }    
     return maxlen;
 }
