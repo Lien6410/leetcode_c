@@ -1,0 +1,103 @@
+/*
+Given a string s, find the longest palindromic substring in s. You may assume that the maximum length of s is 1000.
+
+Example:
+
+Input: "babad"
+
+Output: "bab"
+
+Note: "aba" is also a valid answer.
+Example:
+
+Input: "cbbd"
+
+Output: "bb"
+*/
+
+char *oddSearch(char *s , int mid , int slen) {
+    char *oddout = (char *) malloc(sizeof(char) * slen + 1);
+    int head = mid;
+    int tail = mid;
+    int substringset = 0;
+    while ((head > 0) && (tail < slen - 1) && (!substringset)) {
+        if (s[head] == s[tail]) {
+            head--;
+            tail++;
+        }
+        else {
+            head++;
+            tail--;
+            substringset = 1;
+        }           
+    } // extend odd palindrome substring. stop when head == 0 or tail == end or no more palindrome property.
+    if (((head == 0) || (tail == slen - 1)) && (s[head] != s[tail])) {
+            head++;
+            tail--;  
+    }  // check the edge is in the substring.
+    for(int i = 0; i < tail - head + 1; i++) oddout[i] = s[i + head];
+    oddout[tail - head + 1] = NULL;
+    return oddout;    
+}
+
+char *evenSearch(char *s , int mid , int slen) {
+    char *evenout = (char *) malloc(sizeof(char) * slen + 1);
+    int head = mid;
+    int tail = mid + 1;
+    int substringset = 0;
+    while ((head > 0) && (tail < slen - 1) && (!substringset)) {
+        if (s[head] == s[tail]) {
+            head--;
+            tail++;
+        }
+        else {
+            head++;
+            tail--;
+            substringset = 1;
+        }           
+    } // extend odd palindrome substring. stop when head == 0 or tail == end or no more palindrome property.
+    if (((head == 0) || (tail == slen - 1)) && (s[head] != s[tail])) {
+        head++;
+        tail--;
+    }// check the edge is in the substring.
+    for(int i = 0; i < tail - head + 1; i++) evenout[i] = s[i + head];
+    evenout[tail - head + 1] = NULL;
+    return evenout;    
+}
+char* longestPalindrome(char* s) {
+    if (*s == NULL) return NULL;
+    int slen = strlen(s);
+    printf("slen = %d.\n",slen);    
+    if (slen == 1) return s;
+    int maxlen = 1;
+    char *answer = (char *) malloc(sizeof(char) * slen + 1);
+    answer[0] = s[0]; answer[1] = NULL;
+    for(int i = 1; i < slen - 1; i++)
+    {
+        int templen = 0;
+        char *tempstr = (char *) malloc(sizeof(char) * slen + 1);        
+        tempstr = oddSearch(s , i , slen);
+        templen = strlen(tempstr);
+        if (templen > maxlen) {
+            maxlen = templen;
+            for (int j = 0; j < maxlen; j++) answer[j] = tempstr[j];
+            answer[maxlen] = NULL;
+        }
+    }
+    
+    for(int i = 0; i < slen - 1; i++)
+    {
+        int templen = 0;
+        char *tempstr = (char *) malloc(sizeof(char) * slen + 1);
+        tempstr = evenSearch(s , i , slen);
+        templen = strlen(tempstr);
+        if (templen > maxlen) {
+            maxlen = templen;
+            for (int j = 0; j < maxlen; j++) answer[j] = tempstr[j];
+            answer[maxlen] = NULL;
+        }        
+    }
+        
+    return answer;
+    
+}
