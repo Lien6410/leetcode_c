@@ -15,54 +15,44 @@ Input: "cbbd"
 Output: "bb"
 */
 
-char *oddSearch(char *s , int mid , int slen) {
-    char *oddout = (char *) malloc(sizeof(char) * slen + 1);
-    int head = mid;
-    int tail = mid;
+int oddSearch(char *s , int mid , int slen) {
+    int dis = 0;
+    //int head = mid - dis;
+    //int tail = mid + dis;
     int substringset = 0;
-    while ((head > 0) && (tail < slen - 1) && (!substringset)) {
-        if (s[head] == s[tail]) {
-            head--;
-            tail++;
+    while ((mid - dis > 0) && (mid + dis < slen - 1) && (!substringset)) {
+        if (s[mid - dis] == s[mid + dis]) {
+            dis++;
         }
         else {
-            head++;
-            tail--;
+            dis--;
             substringset = 1;
         }           
     } // extend odd palindrome substring. stop when head == 0 or tail == end or no more palindrome property.
-    if (((head == 0) || (tail == slen - 1)) && (s[head] != s[tail])) {
-            head++;
-            tail--;  
-    }  // check the edge is in the substring.
-    for(int i = 0; i < tail - head + 1; i++) oddout[i] = s[i + head];
-    oddout[tail - head + 1] = NULL;
-    return oddout;    
+    if (((mid - dis == 0) || (mid + dis == slen - 1)) && (s[mid - dis] != s[mid + dis])) {
+            dis--;  
+    }  // check the edge is in the substring.        
+    return dis;    
 }
 
-char *evenSearch(char *s , int mid , int slen) {
-    char *evenout = (char *) malloc(sizeof(char) * slen + 1);
-    int head = mid;
-    int tail = mid + 1;
+int evenSearch(char *s , int mid , int slen) {
+    int dis = 0;
+    //int head = mid - dis;
+    //int tail = mid + 1 + dis;
     int substringset = 0;
-    while ((head > 0) && (tail < slen - 1) && (!substringset)) {
-        if (s[head] == s[tail]) {
-            head--;
-            tail++;
+    while ((mid - dis > 0) && (mid + 1 + dis < slen - 1) && (!substringset)) {
+        if (s[mid - dis] == s[mid + 1 + dis]) {
+            dis++;
         }
         else {
-            head++;
-            tail--;
+            dis--;
             substringset = 1;
         }           
     } // extend odd palindrome substring. stop when head == 0 or tail == end or no more palindrome property.
-    if (((head == 0) || (tail == slen - 1)) && (s[head] != s[tail])) {
-        head++;
-        tail--;
+    if (((mid - dis == 0) || (mid + 1 + dis == slen - 1)) && (s[mid - dis] != s[mid + 1 + dis])) {
+        dis--;
     }// check the edge is in the substring.
-    for(int i = 0; i < tail - head + 1; i++) evenout[i] = s[i + head];
-    evenout[tail - head + 1] = NULL;
-    return evenout;    
+    return dis;    
 }
 char* longestPalindrome(char* s) {
     if (*s == NULL) return NULL;
@@ -75,12 +65,18 @@ char* longestPalindrome(char* s) {
     for(int i = 1; i < slen - 1; i++)
     {
         int templen = 0;
-        char *tempstr = (char *) malloc(sizeof(char) * slen + 1);        
-        tempstr = oddSearch(s , i , slen);
-        templen = strlen(tempstr);
+        int tempdis = 0;
+        tempdis = oddSearch(s , i , slen);
+        templen = tempdis * 2 + 1;
         if (templen > maxlen) {
             maxlen = templen;
-            for (int j = 0; j < maxlen; j++) answer[j] = tempstr[j];
+            answer[tempdis] = s[i];
+            int dis = tempdis;
+            while(dis > 0) {
+                answer[tempdis - dis] = s[i - dis];
+                answer[tempdis + dis] = s[i + dis];
+                dis--;
+            }
             answer[maxlen] = NULL;
         }
     }
@@ -88,12 +84,19 @@ char* longestPalindrome(char* s) {
     for(int i = 0; i < slen - 1; i++)
     {
         int templen = 0;
-        char *tempstr = (char *) malloc(sizeof(char) * slen + 1);
-        tempstr = evenSearch(s , i , slen);
-        templen = strlen(tempstr);
+        int tempdis = 0;
+        tempdis = evenSearch(s , i , slen);
+        templen = tempdis * 2 + 2;
         if (templen > maxlen) {
             maxlen = templen;
-            for (int j = 0; j < maxlen; j++) answer[j] = tempstr[j];
+            answer[tempdis] = s[i];
+            answer[tempdis + 1] = s[i + 1];
+            int dis = tempdis;
+            while(dis > 0) {
+                answer[tempdis - dis] = s[i - dis];
+                answer[tempdis + 1 + dis] = s[i + 1 + dis];
+                dis--;
+            }
             answer[maxlen] = NULL;
         }        
     }
