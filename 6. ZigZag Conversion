@@ -1,0 +1,73 @@
+/*
+The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
+
+P   A   H   N
+A P L S I I G
+Y   I   R
+And then read line by line: "PAHNAPLSIIGYIR"
+Write the code that will take a string and make this conversion given a number of rows:
+
+string convert(string text, int nRows);
+convert("PAYPALISHIRING", 3) should return "PAHNAPLSIIGYIR".
+*/
+
+int my_remain(int i, int rs) {
+    if (rs - 1 >= i) return 1;
+    return 0;
+}
+
+char* convert(char* s, int numRows) {
+    int slen = strlen(s);
+    if (slen <= 1) return s;
+    if (numRows <= 1) return s;
+    if (numRows == 2) {
+        char *result = (char *) malloc(sizeof(char) * (slen + 1));
+        for (int i = 0; i < (slen + 1) / 2; i++) result[i] = s[i * 2];
+        for (int i = 0; i < slen / 2; i++) result[i + ((slen + 1) / 2)] = s[i * 2 + 1];
+        result[slen] = NULL;
+        return result;
+    }
+    if (slen <= numRows) {
+        return s;
+    }
+    char *result = (char *) malloc(sizeof(char) * (slen + 1));
+    int framesize = numRows + numRows - 2;
+    int qs = slen / framesize;
+    int rs = slen % framesize;
+    //slen = qs * framesize + rs;    
+    int *sumRn = (int *) malloc(sizeof(int) * numRows);
+    sumRn[0] = 0 + qs * 1 + my_remain(0 , rs);
+    for (int i = 1; i < numRows - 1; i++) sumRn[i] = sumRn[i - 1] + qs * 2 + my_remain(i , rs) + my_remain(framesize - i , rs);
+    // sumRn[numRows - 1] only used to check sumRn correct.
+    /*
+    sumRn[numRows - 1] = sumRn[numRows - 2] + qs * 1 + my_remain(numRows - 1 , rs);
+    if (sumRn[numRows - 1] != slen) {
+        printf("sumRn count error!\n");
+        return NULL;
+    }
+    */
+    /*
+    for (int i = numRows; i < framesize; i++) sumRn[i] = sumRn[framesize - i];        
+    for (int i = 0; i < framesize; i++) printf("sumRn[%d] = %d.\n" , i , sumRn[i]);
+    */
+    //check sumRn correct?
+    
+    for (int i = 0; i < slen; i++) {
+        int q = i / framesize;
+        int r = i % framesize;
+        // i = q * framesize + r;       
+        int index = 0;
+        if (r == 0) {
+            index = q;
+        } else if (r < numRows - 1) {
+            index = sumRn[r - 1] + q * 2;
+        } else if (r == numRows - 1) {
+            index = sumRn[r - 1] + q;
+        } else {
+            index = sumRn[(framesize - r) - 1] + q * 2 + 1;
+        }
+        result[index] = s[i];
+    }
+    result[slen] = NULL;
+    return result;
+}
