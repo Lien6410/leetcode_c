@@ -20,78 +20,42 @@ If the first sequence of non-whitespace characters in str is not a valid integra
 If no valid conversion could be performed, a zero value is returned. If the correct value is out of the range of representable values, INT_MAX (2147483647) or INT_MIN (-2147483648) is returned.
 */
 
-#include <climits.h>
-
-int get_value(char s) {
-    switch (s) {
-        case '0':
-            return 0;
-        case '1':
-            return 1;
-        case '2':
-            return 2;
-        case '3':
-            return 3;
-        case '4':
-            return 4;
-        case '5':
-            return 5;
-        case '6':
-            return 6;
-        case '7':
-            return 7;
-        case '8':
-            return 8;
-        case '9':
-            return 9;
-        default:
-            return 11;            
-    }
-}
 int myAtoi(char* str) {
-    if (*str == '\0') return 0;    
-    int len = strlen(str);
-    int result = 0;
-    int sign = 2; // 0 be negative, 1 be positive, 2 be unknow.
-    int i = 0;
-    while ((i < len) && (str[i] == ' ')) {
-        i++;
-    }
-    long sum = 0;
-    while (i < len) {
-        if (str[i] == '-') {
-            if (sign != 2) {
-                return 0;
-            } else {
-                sign = 0;
-                i ++;
-            }
-        } else if (str[i] == '+') {
-            if (sign != 2) {
-                return 0;
-            } else {
-                sign = 1;
-                i ++;
-            }
-        } else {
-            if (get_value(str[i]) == 11) {
-                i = len;
-            } else {
-                sum = sum*10 + get_value(str[i]);                
-                if ((sum >= INT_MAX) && (sign != 0)) {
-                    sum = INT_MAX;
-                    i = len;
-                } else if ((sum >= INT_MAX + 1L) && (sign == 0))
-                {
-                    sum = INT_MAX + 1L;
-                    i = len;
-                } else {
-                    i++;
-                }                
-            }
-        }
-    }
-    if (sign == 0) sum = -sum;
+ 
+    int i = 0, sign = 1, base = 0;
+    int signAppear = 0;
     
-    return (int) sum;
+    while(str[i] == ' '){i++;}
+    if( str[i] =='+' || str[i] =='-'  ){
+        sign = 1 - 2*(str[i++] =='-'); 
+        signAppear = 1;
+    }
+    
+    while(  (str[i]>='0' && str[i]<='9') && str[i]!= NULL   ){
+        
+        if(signAppear == 1){
+             if( str[i] =='+' || str[i] =='-'  ){
+                return 0;
+             }
+            
+        }
+        
+        
+        if(base > INT_MAX /10 ||    (  base == INT_MAX/10 && str[i] -'0'> 7    ) ){
+            if(sign == 1){
+                
+                return INT_MAX;
+                
+            }else{
+                
+                return INT_MIN;
+            }
+            
+        }
+        base = base * 10 + (str[i++] - '0');
+        
+        
+    }
+    
+    return base*sign;    
 }
