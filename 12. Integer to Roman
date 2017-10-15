@@ -1,0 +1,86 @@
+/*
+Given an integer, convert it to a roman numeral.
+
+Input is guaranteed to be within the range from 1 to 3999.
+*/
+
+/*
+    1. check legal input
+    2. check M (1000)    CM (900)   3 + 2
+    3. check D (500)     CD (400)   
+    4. check C (100)     XC (90)
+    5. check L (50)      XL (40)
+    6. check X (10)      IX (9)
+    7. check V (5)       IV (4)
+    8. check I (1)
+*/
+char* intToRoman(int num) {
+    if (num < 1 || num > 3999) return '\0';
+    char *roman = (char *) malloc(sizeof(char) * (15 + 1));
+    int i = 0;
+    while(num > 0) {
+        if (num >= 1000) {
+            roman[i] = 'M';    
+            i++;
+            num = num - 1000;
+        } else if (num >= 900) {
+            roman[i] = 'C';
+            roman[i + 1] = 'M';
+            i += 2;
+            num = num - 900;
+        } else if (num >= 500) {
+            roman[i] = 'D';    
+            i++;
+            num = num - 500;
+        } else if (num >= 400) {
+            roman[i] = 'C';
+            roman[i + 1] = 'D';
+            i += 2;
+            num = num - 400;
+        } else if (num >= 100) {
+            roman[i] = 'C';    
+            i++;
+            num = num - 100;
+        } else if (num >= 90) {
+            roman[i] = 'X';
+            roman[i + 1] = 'C';
+            i += 2;
+            num = num - 90;
+        } else if (num >= 50) {
+            roman[i] = 'L';    
+            i++;
+            num = num - 50;
+        } else if (num >= 40) {
+            roman[i] = 'X';
+            roman[i + 1] = 'L';
+            i += 2;
+            num = num - 40;
+        } else if (num >= 10) {
+            roman[i] = 'X';    
+            i++;
+            num = num - 10;
+        } else if (num >= 9) {
+            roman[i] = 'I';
+            roman[i + 1] = 'X';
+            i += 2;
+            num = num - 9;
+        } else if (num >= 5) {
+            roman[i] = 'V';    
+            i++;
+            num = num - 5;
+        } else if (num >= 4) {
+            roman[i] = 'I';
+            roman[i + 1] = 'V';
+            i += 2;
+            num = num - 4;
+        } else if (num >= 1) {
+            roman[i] = 'I';    
+            i++;
+            num = num - 1;
+        }
+    }
+    roman[i] = '\0';
+    return roman;
+    
+    
+}
