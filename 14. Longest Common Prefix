@@ -1,0 +1,37 @@
+/*
+*/
+// method I, LCP(strall) = LCP(LCP(...(LCP(LCP(str1,str2),str3),..)
+
+char* longestCommonPrefix(char** strs, int strsSize) {
+    if (strs == NULL || strsSize == 0) return "";
+    char *preFix = (char *) malloc(strlen(strs[0]) + 1);
+    strcpy(preFix, strs[0]);
+    preFix[strlen(strs[0])] = 0;
+    int preFixEnd = strlen(strs[0]) - 1;
+    for (int i = 1; i < strsSize; i++) {         
+        for (int j = 0; j <= preFixEnd; j++) {
+            if (strs[i][j] != preFix[j] || j == strlen(strs[i])) {
+                strncpy(preFix, strs[0], j);
+                preFix[j] = 0;                
+                if (preFix[0] == 0) return "";
+                preFixEnd = j - 1;
+                break;
+            }
+        }         
+    }
+    return preFix;
+}
+
+/*
+public String longestCommonPrefix(String[] strs) {
+    if (strs == null || strs.length == 0) return "";
+    for (int i = 0; i < strs[0].length() ; i++){
+        char c = strs[0].charAt(i);
+        for (int j = 1; j < strs.length; j ++) {
+            if (i == strs[j].length() || strs[j].charAt(i) != c)
+                return strs[0].substring(0, i);             
+        }
+    }
+    return strs[0];
+}
+*/
