@@ -4,24 +4,30 @@ Write a function to find the longest common prefix string amongst an array of st
 // method I, LCP(strall) = LCP(LCP(...(LCP(LCP(str1,str2),str3),..)
 
 char* longestCommonPrefix(char** strs, int strsSize) {
-    if (strs == NULL || strsSize == 0) return "";
-    char *preFix = (char *) malloc(strlen(strs[0]) + 1);
-    strcpy(preFix, strs[0]);
-    preFix[strlen(strs[0])] = 0;
-    int preFixEnd = strlen(strs[0]) - 1;
-    for (int i = 1; i < strsSize; i++) {         
-        for (int j = 0; j <= preFixEnd; j++) {
-            if (strs[i][j] != preFix[j] || j == strlen(strs[i])) {
-                strncpy(preFix, strs[0], j);
-                preFix[j] = 0;                
-                if (preFix[0] == 0) return "";
-                preFixEnd = j - 1;
+    if (strs == NULL || strsSize < 1) return "";
+    int lineCount = 0, sameSize = 0;   
+    int len = strlen(strs[0]);    
+    for (int i = 0; i < len; i++) {
+        sameSize = 1; // strs[0][i] is equal to strs[0][i] for such i, thus at least one row has the ith element is equal to strs[0][i]
+        for(int j = 1; j < strsSize; j++) {
+            if ((*strs[j] != NULL) && (strs[j][i] == strs[0][i]))
+                sameSize++;
+            else
                 break;
-            }
-        }         
+        }
+        
+        if(sameSize == strsSize) // if strs[j][i] is equal to strs[0][i] for each j and such i, then this column checked.
+            lineCount++;
+        else break;
     }
-    return preFix;
+    
+    if (lineCount == 0) return "";
+    char *result = malloc(lineCount+1);
+    strncpy(result, strs[0], lineCount);
+    result[lineCount] = '\0';   
+    return result;
 }
+
 
 /*
 public String longestCommonPrefix(String[] strs) {
