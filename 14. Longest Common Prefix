@@ -1,4 +1,5 @@
 /*
+Write a function to find the longest common prefix string amongst an array of strings.
 */
 // method I, LCP(strall) = LCP(LCP(...(LCP(LCP(str1,str2),str3),..)
 
