@@ -1,0 +1,97 @@
+/*
+Given a linked list, remove the nth node from the end of list and return its head.
+
+For example,
+
+   Given linked list: 1->2->3->4->5, and n = 2.
+
+   After removing the second node from the end, the linked list becomes 1->2->3->5.
+Note:
+Given n will always be valid.
+Try to do this in one pass.
+*/
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+#include <stddef.h>
+
+typedef struct ListNode node;
+
+int size_of_node(node *head) {
+    int count = 0;
+    node *curN = head;
+    while(curN != NULL) {        
+        curN = curN -> next;
+        count++;
+    }    
+    return count;
+}
+
+node *preNode(node *head, node *curN) {
+    if (curN == head) exit(1);
+    node *preN = head;
+    while (preN -> next != curN) preN = preN -> next;
+    return preN;
+}
+
+node *delHead(node *head) {
+    if (head -> next == NULL) return NULL;
+    node *newHead = head -> next;
+    free(head);
+    return newHead;
+}
+
+node *goToTail(node *head) {
+    if (head == NULL) exit(1);
+    node *tail = head;
+    while(tail -> next != NULL) tail = tail -> next;
+    return tail;    
+}
+
+node *delTail(node *head) {
+    node *tail = goToTail(head);
+    if (head == tail) 
+        return delHead(head);
+    else {
+        node *preN = preNode(head, tail);
+        preN -> next = NULL;
+        free(tail);
+        return head;
+    }
+}
+
+node *goToNth(node *head, int n) {
+    if (n < 1) exit(1);
+    if (n == 1) return head;
+    node *curN = head;
+    for (int i = 0; i < n - 1; i++) {
+        curN = curN -> next;
+    }
+    return curN;
+}
+
+struct ListNode* removeNthFromEnd(struct ListNode* head, int n) {
+    int count = size_of_node(head);
+    if (count < n)
+        exit(1);
+    else if (n == 1)
+        return delTail(head);    
+    else if (n == count)
+        return delHead(head);
+    else {
+        int index = count - n + 1;
+        node *curN = goToNth(head, index);
+        node *preN = preNode(head, curN);        
+        preN -> next = curN -> next;
+        free(curN);
+        return head;
+    } 
+        
+    return "";        
+}
