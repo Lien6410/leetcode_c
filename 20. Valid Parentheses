@@ -6,51 +6,22 @@ The brackets must close in the correct order, "()" and "()[]{}" are all valid bu
 class Solution {
 public:
     bool isValid(string s) {
-        if (s.size() % 2) return false;
-        for (auto i = 0; i != s.size(); ++i) {
-            cout<<s[i];
+    stack<char> it;
+    char temp;
+    for(char c:s)
+    {
+        if(c == '{'|| c == '('|| c =='[')
+            it.push(c);
+        else
+        {
+            if(it.empty())
+                return false;
+            temp=it.top();
+            if(c-temp != 1 && c-temp != 2)
+                return false;
+            it.pop();
         }
-        return isValid_sk(s);
     }
-    
-    bool isValid_s2(string& s) {
-        if (s.size() != 2) return false;
-        if (s.size() == 2) {
-            if (s[0] == '(') {
-                if (s[1] == ')') return true;
-                return false;
-            }
-            else if (s[0] == '[') {
-                if (s[1] == ']') return true;
-                return false;
-            } 
-            else if (s[0] == '{') {
-                if (s[1] == '}') return true;
-                return false;
-            }
-            else
-                return false;
-        }             
-    }
-    
-    bool isValid_sk(string& s) {
-        if (s.size() == 2) return isValid_s2(s);
-        for (auto i = 0; i != s.size() - 1; i++) {
-            if (s[i] == '(') {
-                if (s[i + 1] == ')')
-                    return isValid_sk(s.erase(i, 2));                
-            }
-            else if (s[i] == '[') {
-                if (s[i + 1] == ']')
-                    return isValid_sk(s.erase(i, 2));                
-            }
-            else if (s[i] == '{') {
-                if (s[i + 1] == '}')
-                    return isValid_sk(s.erase(i, 2));                
-            }
-            else
-                return false;
-        }
-        return false;
-    } 
+    return it.empty();
+}
 };
