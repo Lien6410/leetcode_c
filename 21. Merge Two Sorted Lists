@@ -12,26 +12,29 @@ Merge two sorted linked lists and return it as a new list. The new list should b
  */
 class Solution {
 public:
-    ListNode *mergeTwoLists(ListNode *l1, ListNode *l2) {
-        ListNode *l3 = new ListNode(-1);
-        ListNode *t3 = l3;
-        while(l1 && l2) {
-            if(l1->val<=l2->val) {
-                t3->next = l1;
-                l1 = l1->next;
-            }
-            else {
-                t3->next = l2;
-                l2 = l2->next;
-            }
-            t3 = t3->next;
-            t3->next = NULL;
-        }
-        
-        t3->next = l1 ? l1 : l2;
-        ListNode* temp = l3;
-        l3 = l3->next;
-        delete temp;
-        return l3;
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        if(l1 == NULL) return l2;
+        if(l2 == NULL) return l1;
+        vector<int> myvec {};
+        while(l1) {
+            myvec.push_back(l1 -> val);
+            l1 = l1 -> next;
+        }       
+        while(l2) {
+            myvec.push_back(l2 -> val);
+            l2 = l2 -> next;
+        }        
+        std::sort(myvec.begin(), myvec.end());       
+        ListNode *mylist = new ListNode(-1);
+        ListNode* cur = mylist;
+        for (auto x : myvec) {
+            ListNode *temp = new ListNode(x);           
+            cur -> next = temp;
+            cur = cur -> next;
+        }        
+        ListNode* psuhead = mylist;
+        mylist = mylist->next;
+        delete psuhead;
+        return mylist;
     }
-};
+}; 
