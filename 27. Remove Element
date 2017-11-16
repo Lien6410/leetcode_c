@@ -22,3 +22,21 @@ public:
         return nums.size();
     }
 };
+
+
+/* fastest anwser */
+class Solution {
+public:
+    int removeElement(vector<int>& nums, int val) {
+        int wr_idx = 0;
+        
+        for(int i=0; i < nums.size(); i++) {
+            if( nums[i] != val) {
+                nums[wr_idx] = nums[i];
+                wr_idx++;
+            }
+        }
+        
+        return wr_idx;
+    }
+};
