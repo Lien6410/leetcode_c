@@ -1,0 +1,29 @@
+/*
+Given a string containing just the characters '(' and ')', find the length of the longest valid (well-formed) parentheses substring.
+
+For "(()", the longest valid parentheses substring is "()", which has length = 2.
+
+Another example is ")()())", where the longest valid parentheses substring is "()()", which has length = 4.
+*/
+
+class Solution {
+public:
+    int longestValidParentheses(string s) {
+        // dp - method
+        if (s.empty()) return 0;
+        int n = s.size(), maxLen = 0;
+        vector<int> dp(n,0); // dp[i] = longest well-defined substring end at s[i]
+        for(int i=1; i!=n; i++) {
+            int j = i-1-dp[i-1];
+            if(s[i]=='(' || j<0 || s[j]==')') 
+                dp[i] = 0;
+            else {
+                dp[i] = dp[i-1]+2+dp[j - 1];
+                maxLen = max(maxLen, dp[i]);
+            }
+        }
+        for (auto it = 0; it != n; it++) cout << it << " , " << dp[it] << endl;
+        return maxLen;
+        //return 0;
+    }
+};
