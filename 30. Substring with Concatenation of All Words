@@ -1,0 +1,44 @@
+/*
+You are given a string, s, and a list of words, words, that are all of the same length. Find all starting indices of substring(s) in s that is a concatenation of each word in words exactly once and without any intervening characters.
+
+For example, given:
+s: "barfoothefoobarman"
+words: ["foo", "bar"]
+
+You should return the indices: [0,9].
+(order does not matter).
+*/
+
+class Solution {
+public:
+    vector<int> findSubstring(string S, vector<string> &L) {
+        vector<int> allPos; //empty vector
+        if (L.empty()) return allPos;
+        int numWords = L.size();
+        int wordSize = L[0].size();
+        int ssLen = wordSize * numWords; //len(substring)
+        if(S.size() < numWords) return allPos;
+        
+        unordered_map<string,int> dic; //dictionary
+        for(auto i = 0; i != numWords; i++) dic[L[i]]++;
+        
+        for(auto i = 0; i <= S.size() - ssLen; i++) {
+            if(checkSubstring(S, i, dic, wordSize, numWords))
+                allPos.push_back(i);            
+        }           
+        return allPos;
+    }
+    
+    bool checkSubstring(string S, int start, unordered_map<string,int> &dic, int wordSize, int numWords) {
+        if(S.size() - start + 1 < wordSize*numWords) return false; //same as i <= S.size() - sslen
+        unordered_map<string,int> wordFound;
+        
+        for(auto i = 0; i < numWords; i++) { // compare each word after start. here can rewrite i++ into i+= wordSize. 
+            string curWord = S.substr(start + i * wordSize, wordSize); //from start get substring with size() = one word in L.
+            if(!dic.count(curWord)) return false; // if the substr curWord is not in dictionary.
+            wordFound[curWord]++; // else if the substr curWord is an word in dic. then this word count 1 and record in wordFound.
+            if(wordFound[curWord] > dic[curWord]) return false; // if the word has found in the same start, 
+        }
+        return true;
+    }
+};
