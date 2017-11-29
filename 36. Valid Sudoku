@@ -57,3 +57,31 @@ public:
         return true;
     }
 };
+
+
+/*-----------------------------*/
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        //use extra space to speed up process
+        bool h[9][9] = {}; // horizontal (row) & number record
+        bool v[9][9] = {}; // vertical (col) & number record
+        bool s[9][9] = {}; // square & number record
+        
+        int m = board.size();
+        int n = (m > 0)?board[0].size():0;        
+        
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (board[i][j] == '.') continue;
+                if (board[i][j] < '1' || board[i][j] > '9') return false;
+                int k = board[i][j] - '1';
+                int sn = i/3*3 + j/3;
+                if ((h[i][k]) || (v[j][k]) || s[sn][k]) return false;
+                h[i][k] = v[j][k] = s[sn][k] = true;
+            }
+        }
+        return true;
+    }
+};
+
