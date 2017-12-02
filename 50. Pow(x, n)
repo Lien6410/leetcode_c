@@ -1,0 +1,19 @@
+/*
+Implement pow(x, n).
+*/
+
+class Solution {
+public:
+    double myPow(double x, int n) {
+        bool negPow = n < 0 ? true : false;
+        n = abs(n); 
+        double res = 1.0;
+        for(int i = 31; i != -1; i--) {
+            res *= res;
+            if(n & (1 << i))
+                res *= x;
+        }
+        if(negPow) res = 1/res;
+        return res;
+    }
+};
