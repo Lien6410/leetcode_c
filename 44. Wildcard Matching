@@ -1,0 +1,54 @@
+/*
+Implement wildcard pattern matching with support for '?' and '*'.
+
+'?' Matches any single character.
+'*' Matches any sequence of characters (including the empty sequence).
+
+The matching should cover the entire input string (not partial).
+
+The function prototype should be:
+bool isMatch(const char *s, const char *p)
+
+Some examples:
+isMatch("aa","a") → false
+isMatch("aa","aa") → true
+isMatch("aaa","aa") → false
+isMatch("aa", "*") → true
+isMatch("aa", "a*") → true
+isMatch("ab", "?*") → true
+isMatch("aab", "c*a*b") → false
+*/
+
+//consider case :
+//s = aabcdbch
+//p = a*bch
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        //corner case
+        if (p.empty()) return s.empty();
+        //general case        
+        int m = s.size(), n = p.size();
+        int i = 0, j = 0, x = 0, y = -1;
+        while (i != m) {
+            if ((j != n) && (s[i] == p[j] || p[j] == '?')) {
+                i++;
+                j++;
+            }
+            else if ((j != n) && (p[j] == '*')) {
+                x = i;
+                y = j;
+                j++;
+            }
+            else if (y >= 0) {
+                i = x + 1;
+                x++;
+                j = y;
+            }
+            else
+                return false;            
+        }
+        while ( j!= n && p[j] == '*') j++;
+        return j == n;
+    }
+};
